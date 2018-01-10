@@ -1,0 +1,8 @@
+version: '2'
+
+services:
+  telegraf:
+    image: telegraf:1.5
+    volumes:
+      - ./telegraf.conf:/etc/telegraf/telegraf.conf:ro
+      - /var/run/docker.sock:/var/run/docker.sock

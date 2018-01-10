@@ -1,0 +1,49 @@
+# Telegraf Configuration
+
+[global_tags]
+  server = "<nom de la machine>"
+
+# Configuration for influxdb server to send metrics to
+[[outputs.influxdb]]
+  # The full HTTP or UDP URL for your InfluxDB instance.
+  urls = ["http://influxdb:8086"]
+  # The target database for metrics (telegraf will create it if not exists).
+  database = "telegraf"
+
+  # Name of existing retention policy to write to.  Empty string writes to
+  # the default retention policy.
+  retention_policy = ""
+
+  timeout = "5s"
+  username = "telegraf"
+  password = "<password>"
+
+# Read metrics about docker containers
+[[inputs.docker]]
+   # Docker Endpoint
+   endpoint = "unix:///var/run/docker.sock"
+
+# Read metrics about CPU usage
+[[inputs.cpu]]
+  percpu = false
+  totalcpu = true
+  fieldpass = [ "usage*" ]
+ 
+# Read metrics about disk usagee
+[[inputs.disk]]
+  fielddrop = [ "inodes*" ]
+  mount_points=["/","/home"]
+ 
+# Read metrics about diskio usage
+[[inputs.diskio]]
+  devices = ["vda1"]
+  skip_serial_number = true
+ 
+# Read metrics about network usage
+[[inputs.net]]
+  interfaces = [ "eth0" ]
+  fielddrop = [ "icmp*", "ip*", "tcp*", "udp*" ]
+
+# Read metrics about memory usage
+[[inputs.mem]]
+  # no configuration
